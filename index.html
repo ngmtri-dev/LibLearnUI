@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LibLearn – Không gian học thư viện</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%232F7D62'/%3E%3Cpath d='M15 10c-4 0-4 3-4 7 0 2-2 3-3 3 1 0 3 1 3 3 0 4 0 7 4 7M25 10c4 0 4 3 4 7 0 2 2 3 3 3-1 0-3 1-3 3 0 4 0 7-4 7' fill='none' stroke='%23E1F0E9' stroke-width='2.4' stroke-linecap='round'/%3E%3Ccircle cx='20' cy='20' r='2.4' fill='%23E1F0E9'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF1F4;--panel:#fff;--ink:#2B3544;--mut:#667385;--line:#D9DFE6;--pri:#3B5BA9;--pi:#fff;--priBg:#E6ECF8;--side:#1E2733;--sideInk:#AAB5C3;--ok:#2F7D62;--okBg:#E1F0E9;--warn:#7A5C14;--warnBg:#F1EAD5;--err:#B3372C;--errBg:#F8E3E0;--code:#18202B;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12171E;--panel:#1B222C;--ink:#E2E7ED;--mut:#9AA6B4;--line:#2B3542;--pri:#8CA6E3;--pi:#0E1217;--priBg:#222E47;--side:#0E1217;--sideInk:#9AA6B4;--ok:#6CC4A1;--okBg:#173026;--warn:#D9B964;--warnBg:#33291A;--err:#F08A80;--errBg:#3A1E1B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12171E;--panel:#1B222C;--ink:#E2E7ED;--mut:#9AA6B4;--line:#2B3542;--pri:#8CA6E3;--pi:#0E1217;--priBg:#222E47;--side:#0E1217;--sideInk:#9AA6B4;--ok:#6CC4A1;--okBg:#173026;--warn:#D9B964;--warnBg:#33291A;--err:#F08A80;--errBg:#3A1E1B;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+body{margin:0;font:14px/1.6 "IBM Plex Sans",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--panel);z-index:30}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh;transition:grid-template-columns .2s}.app.col{grid-template-columns:72px minmax(0,1fr)}
+.side{background:var(--side);color:var(--sideInk);overflow:hidden;position:sticky;top:0;align-self:start;height:100vh;white-space:nowrap;display:flex;flex-direction:column}
+.logo{display:flex;gap:10px;align-items:center;padding:18px 20px;color:#fff;font-weight:600;font-size:17px}
+.logo i{width:28px;height:28px;background:var(--ok);display:grid;place-items:center;font-style:normal;color:#fff;font-weight:600}
+.side h4{margin:18px 20px 6px;font-size:12px;font-weight:500;color:#7F8B9A}
+.nl{display:flex;gap:12px;align-items:center;width:calc(100% - 20px);margin:2px 10px;text-align:left;background:none;border:0;border-radius:8px;color:var(--sideInk);padding:9px 12px;font:inherit;cursor:pointer;min-height:42px;overflow:hidden}.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}.foot{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding:10px 0}.app.col .logo{justify-content:center;padding:18px 0}.app.col .logo span,.app.col .nl span,.app.col .side h4{display:none}.app.col .nl{justify-content:center;padding:9px 0}
+.nl:hover{background:rgba(255,255,255,.07);color:#fff}.nl.on{color:#fff;background:#2F7D62}.nl.lk{opacity:.55}
+.main{min-width:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='170'%3E%3Cg fill='%233B5BA9' fill-opacity='.07' font-family='monospace' font-size='15'%3E%3Ctext x='8' y='28'%3Eimport pandas as pd%3C/text%3E%3Ctext x='150' y='80'%3E%7B %7D%3C/text%3E%3Ctext x='18' y='120'%3Edf.groupby()%3C/text%3E%3Ctext x='150' y='156'%3E[ : ]%3C/text%3E%3C/g%3E%3C/svg%3E")}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;gap:10px;align-items:center;padding:10px 20px;background:var(--panel);border-bottom:1px solid var(--line)}
+.top .sp,.tb .sp{flex:1}.bc{color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b{display:inline-flex;gap:8px;align-items:center;justify-content:center;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:8px 18px;font:500 13px "IBM Plex Sans",sans-serif;border-radius:8px;cursor:pointer;min-height:40px;box-shadow:0 1px 2px rgba(20,30,50,.08);transition:background .15s,border-color .15s}
+.b:hover{border-color:var(--pri);background:var(--priBg)}.b:active{transform:translateY(1px)}.b.p{background:var(--pri);color:var(--pi);border-color:var(--pri)}.b.p:hover{filter:brightness(1.1)}.b:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.inp{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:0 12px;min-height:40px;font:inherit;border-radius:8px;width:240px;max-width:100%}
+.av{width:36px;height:36px;display:block;border-radius:8px}.sr{position:relative;display:block}.sr .ic{position:absolute;left:12px;top:10px;width:18px;height:18px;color:var(--mut)}.sr .inp{padding:0 64px 0 38px;width:280px}.sr kbd{position:absolute;right:10px;top:9px;font:12px "IBM Plex Mono",monospace;color:var(--mut);border:1px solid var(--line);border-radius:5px;padding:1px 6px}.ib{position:relative;width:40px;height:40px;display:grid;place-items:center;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;cursor:pointer}.ib:hover{border-color:var(--pri);background:var(--priBg)}.bd{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:var(--pri);color:var(--pi);font:600 11px/18px "IBM Plex Sans",sans-serif;text-align:center;font-style:normal}.ub{display:flex;gap:10px;align-items:center;background:none;border:0;color:var(--ink);cursor:pointer;padding:2px 6px;border-radius:8px;text-align:left;font:inherit}.ub:hover{background:var(--priBg)}.ub span{display:grid;line-height:1.25}.ub small{color:var(--mut);font-size:12px}
+.um{position:absolute;right:20px;top:60px;background:var(--panel);border:1px solid var(--line);min-width:180px;z-index:25;border-radius:8px;overflow:hidden}
+.um button{display:block;width:100%;text-align:left;background:none;border:0;padding:10px 14px;color:var(--ink);font:inherit;cursor:pointer}.um button:hover{background:var(--priBg)}
+.wrap{padding:24px;max-width:1080px;margin:0 auto}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;margin-bottom:16px;box-shadow:0 1px 3px rgba(20,30,50,.06)}
+h1{font-size:22px;margin:0 0 6px;font-weight:600}h2{font-size:17px;margin:0 0 8px;font-weight:600}p{margin:0 0 10px}
+.c{display:inline-block;padding:1px 8px;font-size:12px;font-weight:500;border-radius:2px;background:var(--priBg);color:var(--pri)}
+.c.ok{background:var(--okBg);color:var(--ok)}.c.w{background:var(--warnBg);color:var(--warn)}.c.e{background:var(--errBg);color:var(--err)}
+.tabs{display:flex;border-bottom:1px solid var(--line);margin:14px 0 18px;overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 20px;font:500 14px "IBM Plex Sans",sans-serif;color:var(--mut);cursor:pointer;min-height:44px}
+.tabs button.on{color:var(--pri);border-bottom-color:var(--pri)}
+code{font-family:"IBM Plex Mono",monospace;font-size:13px;background:var(--priBg);padding:1px 5px}
+pre,.con,textarea{font:13px/1.6 "IBM Plex Mono",monospace;background:var(--code);color:#E6EBF2;padding:14px 16px;margin:0 0 12px;border-radius:2px;overflow-x:auto;white-space:pre}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 10px}.flow span{border:1px solid var(--line);padding:6px 12px;background:var(--bg);font-family:"IBM Plex Mono",monospace;font-size:13px}.flow b{color:var(--mut);font-weight:400}
+.k{border-left:3px solid var(--line);padding-left:16px;margin-bottom:20px;transition:background .3s}.k.hl{border-left-color:var(--pri);background:var(--priBg)}
+.strip{display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--warnBg);color:var(--warn);padding:10px 16px;margin-bottom:16px;flex-wrap:wrap}
+.tb{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}
+textarea{display:block;width:100%;min-height:150px;resize:vertical;white-space:pre;border:0}
+.con{white-space:pre-wrap;min-height:84px;border-left:4px solid var(--mut)}.con.ok{border-color:var(--ok)}.con.w{border-color:#D9B964}.con.e{border-color:var(--err)}
+.qh{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}.bar{height:6px;background:var(--line);margin-bottom:18px}.bar i{display:block;height:6px;background:var(--pri)}
+.q{font-size:17px;margin-bottom:16px}
+.opt{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);color:var(--ink);padding:13px 16px;margin-bottom:8px;font:inherit;border-radius:8px;cursor:pointer;min-height:48px}
+.opt:hover:not(:disabled){border-color:var(--pri)}.opt.sel{border-color:var(--pri);background:var(--priBg)}.opt.good{border-color:var(--ok);background:var(--okBg)}.opt.bad{border-color:var(--err);background:var(--errBg)}.opt:disabled{cursor:default}
+.ix{width:26px;height:26px;display:grid;place-items:center;background:var(--bg);font-weight:600;flex:none;border-radius:6px}
+.fb{display:flex;gap:14px;padding:14px 16px;margin:12px 0;border-left:4px solid}.fb.ok{background:var(--okBg);border-color:var(--ok)}.fb.bad{background:var(--errBg);border-color:var(--err)}.fb p{margin:4px 0 8px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.m{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line);flex-wrap:wrap}.m span:first-child{flex:1 1 220px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:16px}.grid .card{margin:0}.big{font-size:26px;font-weight:600}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--side);color:#fff;padding:10px 18px;z-index:40}
+@media(max-width:900px){.app:not(.col){grid-template-columns:200px minmax(0,1fr)}.wrap{padding:14px}.sr,.ub span,.bc{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="usr" viewBox="0 0 40 40"><rect width="40" height="40" fill="#3B5BA9"/><circle cx="20" cy="15" r="6" fill="#E6ECF8"/><path d="M8 36c0-8 5-12 12-12s12 4 12 12z" fill="#E6ECF8"/></symbol>
+<symbol id="lib" viewBox="0 0 40 40"><rect width="40" height="40" fill="#2F7D62"/><path d="M15 10c-4 0-4 3-4 7 0 2-2 3-3 3 1 0 3 1 3 3 0 4 0 7 4 7M25 10c4 0 4 3 4 7 0 2 2 3 3 3-1 0-3 1-3 3 0 4 0 7-4 7" fill="none" stroke="#E1F0E9" stroke-width="2.2"/><circle cx="20" cy="20" r="2.4" fill="#E1F0E9"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol><symbol id="i-code" viewBox="0 0 24 24"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 6l-3 12"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><path d="M6 11h12v9H6zM9 11V8a3 3 0 0 1 6 0v3"/></symbol><symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V4h11l-2 4 2 4H6"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></symbol><symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></symbol><symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17v-6a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/></symbol><symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol><symbol id="i-left" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5v14l12-7z" fill="currentColor"/></symbol></defs></svg>
+<div class="app" id="app">
+<aside class="side" id="side"></aside>
+<div class="main">
+<header class="top">
+<span class="bc" id="bc"></span><span class="sp"></span>
+<label class="sr"><svg class="ic"><use href="#i-search"/></svg><input class="inp" id="srch" placeholder="Tìm bài học" aria-label="Tìm bài học" oninput="S.q=this.value;side()"><kbd>Ctrl K</kbd></label>
+<button class="ib" onclick="theme()" aria-label="Đổi giao diện sáng tối"><svg class="ic"><use href="#i-sun"/></svg></button>
+<button class="ib" onclick="toast('Bạn chưa có thông báo mới')" aria-label="Thông báo"><svg class="ic"><use href="#i-bell"/></svg><em class="bd">2</em></button>
+<button class="ub" onclick="$('#um').hidden=!$('#um').hidden" aria-label="Tài khoản"><svg class="av"><use href="#usr"/></svg><span><b>Học viên</b><small>Sinh viên</small></span><svg class="ic"><use href="#i-chev"/></svg></button>
+</header>
+<div class="um" id="um" hidden><button onclick="toast('Hồ sơ chưa có trong bản demo')">Hồ sơ học viên</button><button onclick="toast('Đổi trình độ chưa có trong bản demo')">Đổi trình độ</button><button onclick="toast('Đăng xuất chưa có trong bản demo')">Đăng xuất</button></div>
+<div class="wrap" id="v"></div>
+</div></div>
+<div class="toast" id="t" hidden></div>
+<script>
+const $=s=>document.querySelector(s);
+const K={K1:'groupby chia dữ liệu thành nhóm',K2:'Chọn cột sau khi nhóm',K3:'Hàm tổng hợp: mean, sum'};
+const Q=[
+{k:'K1',t:'mc',q:'Trong <code>df.groupby("lop")</code>, giá trị <code>"lop"</code> dùng để làm gì?',o:['Chọn cột dùng để chia dữ liệu thành các nhóm','Lọc ra các dòng có giá trị là “lop”','Đổi tên cột thành “lop”','Sắp xếp bảng theo cột lop'],a:0,e:'groupby nhận tên cột và tạo một nhóm cho mỗi giá trị khác nhau trong cột đó.'},
+{k:'K2',t:'tf',q:'Viết <code>["diem"]</code> sau groupby nghĩa là chỉ tính trên cột diem trong từng nhóm.',o:['Đúng','Sai'],a:0,e:'Dấu ngoặc vuông chọn cột, nên phép tính sau đó chỉ áp dụng cho cột đã chọn.'},
+{k:'K3',t:'mc',q:'Lớp A có điểm 8 và 6, lớp B có điểm 9. <code>df.groupby("lop")["diem"].mean()</code> trả về gì?',o:['A: 7.0 và B: 9.0','A: 14 và B: 9','Một số duy nhất: 7.67','Báo lỗi'],a:0,e:'mean() tính trung bình riêng cho từng nhóm: (8 + 6) / 2 = 7.0 cho A và 9.0 cho B.'},
+{k:'K3',t:'fill',q:'Để tính <b>tổng</b> điểm của từng lớp, thay <code>mean()</code> bằng hàm nào? Chỉ nhập tên hàm.',a:['sum'],e:'sum() cộng các giá trị trong mỗi nhóm.'},
+{k:'K2',t:'mc',q:'Cách viết nào chọn cột <code>diem</code> sau khi nhóm theo <code>lop</code>?',o:['df.groupby("lop")["diem"]','df.groupby("diem")("lop")','df.groupby["lop"]["diem"]','df.select("diem")'],a:0,e:'Gọi groupby bằng ngoặc tròn, rồi chọn cột bằng ngoặc vuông.'}];
+const START='import pandas as pd\ndf = pd.DataFrame({"lop": ["A","A","B"], "diem": [8, 6, 9]})\n# Viết lệnh in ra tổng điểm của từng lớp\n';
+const HINTS=['Gợi ý 1: dùng df.groupby("lop") để chia nhóm.','Gợi ý 2: chọn cột bằng ["diem"] ngay sau groupby.','Gợi ý 3: kết thúc bằng .sum() rồi bọc trong print(...).'];
+const S={view:'lec',tab:'lec',list:[0,1,2,3,4],qi:0,sel:null,fv:'',checked:false,res:{},code:START,out:null,h:0,col:innerWidth<900,q:''};
+const sc=()=>Object.values(S.res).filter(Boolean).length;
+const pass=()=>Object.keys(S.res).length===Q.length&&sc()/Q.length>=.8;
+function mast(k){const r=Q.map((q,i)=>[q,S.res[i]]).filter(([q])=>q.k===k);if(r.some(([,v])=>v===false))return'r';return r.every(([,v])=>v===true)?'o':'n'}
+const mc=m=>m==='o'?'<span class="c ok">Đã nắm</span>':m==='r'?'<span class="c w">Cần ôn lại</span>':'<span class="c">Chưa làm</span>';
+function toast(m){const t=$('#t');t.textContent=m;t.hidden=false;clearTimeout(S.tt);S.tt=setTimeout(()=>t.hidden=true,2200)}
+function tg(){S.col=!S.col;render()}
+function theme(){const r=document.documentElement;const d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'}
+function nav(v){S.view=v;S.back=null;if(innerWidth<900&&!S.col)tg();render()}
+function tab(t){S.view='lec';S.tab=t;S.back=null;render()}
+function side(){const show=t=>!S.q||t.toLowerCase().includes(S.q.toLowerCase());
+const it=(t,on,fn,cls='',ic='i-book')=>show(t)?`<button class="nl ${on?'on':''} ${cls}" onclick="${fn}" title="${t}"><svg class="ic"><use href="#${ic}"/></svg><span>${t}</span></button>`:'';
+$('#side').innerHTML=`<div class="logo"><i>{ }</i><span>LibLearn</span></div><h4>Tổng quan</h4>${it('Lộ trình của tôi',S.view==='ov',"nav('ov')",'','i-grid')}<h4>Chương 1: DataFrame</h4>${it('C1L1 DataFrame và loc (xong)',0,"toast('Bài này đã hoàn thành, chưa có nội dung demo')",'','i-check')}${it('C1L2 groupby',S.view==='lec',"nav('lec')",'','i-code')}${it('C1L3 merge'+(pass()?'':' (khóa)'),0,pass()?"toast('C1L3 chưa có nội dung trong bản demo')":"toast('Đạt từ 80% quiz bài groupby để mở bài này')",pass()?'':'lk',pass()?'i-book':'i-lock')}<h4>Cuối khóa</h4>${it('Mini-project (khóa)',0,"toast('Mini-project chưa có dữ liệu từ backend')",'lk','i-flag')}<div class="foot"><button class="nl" onclick="tg()" title="Thu gọn thanh bên"><svg class="ic" style="transform:${S.col?'rotate(180deg)':'none'}"><use href="#i-left"/></svg><span>Thu gọn</span></button></div>`}
+const LEC=()=>`${S.back?`<div class="strip"><span>Đang ôn lại: <b>${K[S.back]}</b></span><button class="b p" onclick="tab('qz')">Quay lại quiz</button></div>`:''}
+<div class="card"><h1>C1L2: DataFrame.groupby</h1><div class="row"><span class="c">45 phút</span><span class="c">Trung cấp</span><span class="c w" title="verified = false">Code chưa kiểm chứng</span></div>
+<div class="tabs">${TABS()}</div>
+<p>groupby giúp bạn tính thống kê theo từng nhóm, ví dụ điểm trung bình của mỗi lớp. Dòng dưới đây đi qua bốn bước:</p>
+<div class="flow"><span>df</span><b>→</b><span>groupby("lop")</span><b>→</b><span>["diem"]</span><b>→</b><span>mean()</span><b>→</b><span>kết quả</span></div>
+<pre>import pandas as pd
+df = pd.DataFrame({"lop": ["A","A","B"], "diem": [8, 6, 9]})
+print(df.groupby("lop")["diem"].mean())</pre>
+<div class="k ${S.hl==='K1'?'hl':''}" id="K1"><h2>${K.K1}</h2><p><code>df.groupby("lop")</code> chia các dòng thành nhóm theo giá trị của cột <code>lop</code>. Mỗi giá trị khác nhau của cột tạo ra một nhóm riêng.</p></div>
+<div class="k ${S.hl==='K2'?'hl':''}" id="K2"><h2>${K.K2}</h2><p>Viết <code>["diem"]</code> ngay sau groupby để chỉ tính trên cột <code>diem</code>. Nếu không chọn cột, phép tính áp dụng cho mọi cột số.</p></div>
+<div class="k ${S.hl==='K3'?'hl':''}" id="K3"><h2>${K.K3}</h2><p><code>mean()</code> tính trung bình, <code>sum()</code> tính tổng, <code>count()</code> đếm số dòng của mỗi nhóm.</p></div>
+<div class="row"><button class="b p" onclick="tab('pr')">Làm bài thực hành</button><button class="b" onclick="tab('qz')">Làm quiz</button></div></div>`;
+const TABS=()=>[['lec','Bài giảng'],['pr','Thực hành'],['qz','Quiz']].map(([t,l])=>`<button class="${S.tab===t?'on':''}" onclick="tab('${t}')">${l}</button>`).join('');
+const PR=()=>`<div class="card"><h1>C1L2: DataFrame.groupby</h1><div class="tabs">${TABS()}</div>
+<h2>Bài tập: in ra tổng điểm của từng lớp</h2><p>Sửa đoạn code bên dưới rồi bấm Chạy. Bản demo chạy mô phỏng, chưa chạy Python thật.</p>
+<div class="tb"><button class="b p" onclick="run()"><svg class="ic" style="width:16px;height:16px"><use href="#i-play"/></svg>Chạy</button><button class="b" onclick="rst()">Đặt lại</button><button class="b" onclick="hint()">Gợi ý</button><button class="b" onclick="cp()">Sao chép</button><span class="sp"></span><span class="c w">Chạy mô phỏng</span></div>
+<textarea id="ed" spellcheck="false" aria-label="Khung nhập code" oninput="S.code=this.value">${S.code.replace(/</g,'&lt;')}</textarea>
+${S.h?`<p class="c" style="display:block;margin-bottom:10px">${HINTS.slice(0,S.h).join(' ')}</p>`:''}
+<div class="con ${S.out?S.out.c:''}" id="out" aria-live="polite">${S.out?S.out.t.replace(/</g,'&lt;'):'Kết quả sẽ hiện ở đây.'}</div>
+${S.out&&S.out.k?`<button class="b" onclick="review('${S.out.k}')">Ôn lại: ${K[S.out.k]}</button>`:''}</div>`;
+function run(){const c=$('#ed').value;S.code=c;let t,cl='',k=null;
+if((c.match(/\(/g)||[]).length!==(c.match(/\)/g)||[]).length){t='SyntaxError: dấu ngoặc tròn chưa khớp.';cl='e'}
+else if(!/print\s*\(/.test(c)){t='Chưa có gì được in ra. Hãy dùng print(...).';cl='w'}
+else if(/groupby\(\s*["']lop["']\s*\)\s*\[\s*["']diem["']\s*\]\s*\.sum\(\s*\)/.test(c)){t='lop\nA    14\nB     9\nName: diem, dtype: int64\n\nĐúng yêu cầu: tổng điểm của từng lớp.';cl='ok'}
+else if(/\.mean\(/.test(c)){t='lop\nA    7.0\nB    9.0\nName: diem, dtype: float64\n\nCode chạy được nhưng đề yêu cầu tổng, không phải trung bình.';cl='w';k='K3'}
+else{t='Kết quả chưa khớp đề bài. Hãy kiểm tra cách nhóm theo lop và chọn cột diem.';cl='e';k='K2'}
+S.out={t,c:cl,k};render()}
+function rst(){S.code=START;S.out=null;S.h=0;render()}
+function hint(){S.h=Math.min(3,S.h+1);render()}
+function cp(){navigator.clipboard&&navigator.clipboard.writeText($('#ed').value).then(()=>toast('Đã sao chép code'),()=>toast('Không sao chép được'))}
+function review(k){S.view='lec';S.tab='lec';S.back=k;S.hl=k;render();setTimeout(()=>{const e=document.getElementById(k);e&&e.scrollIntoView({behavior:'smooth',block:'start'})},60);setTimeout(()=>{S.hl=null;const e=document.getElementById(k);e&&e.classList.remove('hl')},3000)}
+function pick(j){S.sel=j;render()}
+function chk(){const i=S.list[S.qi],q=Q[i];let ok;
+if(q.t==='fill'){const v=(S.fv||'').trim().toLowerCase().replace(/\(\)/g,'');if(!v)return toast('Hãy nhập đáp án');ok=q.a.includes(v)}
+else{if(S.sel===null)return toast('Hãy chọn một đáp án');ok=S.sel===q.a}
+S.res[i]=ok;S.ok=ok;S.checked=true;render()}
+function nxt(){S.qi++;S.sel=null;S.fv='';S.checked=false;if(S.qi>=S.list.length)S.fin=true;render()}
+function retry(w){S.list=w?Q.map((q,i)=>i).filter(i=>S.res[i]===false):[0,1,2,3,4];if(!w)S.res={};S.qi=0;S.sel=null;S.fv='';S.checked=false;S.fin=false;render()}
+function QZ(){if(S.fin)return RS();const i=S.list[S.qi],q=Q[i],n=S.list.length;let o;
+if(q.t==='fill')o=`<input class="inp" style="width:100%;font-family:'IBM Plex Mono',monospace" id="fa" aria-label="Đáp án" placeholder="Nhập đáp án" value="${S.fv.replace(/"/g,'&quot;')}" ${S.checked?'disabled':''} oninput="S.fv=this.value">`;
+else o=q.o.map((x,j)=>{let c='opt';if(S.checked){if(j===q.a)c+=' good';else if(j===S.sel)c+=' bad'}else if(j===S.sel)c+=' sel';return `<button class="${c}" ${S.checked?'disabled':''} onclick="pick(${j})"><span class="ix">${'ABCD'[j]}</span>${x}</button>`}).join('');
+const fb=S.checked?`<div class="fb ${S.ok?'ok':'bad'}"><svg class="av" style="flex:none"><use href="#lib"/></svg><div><b>${S.ok?'Chính xác':'Chưa chính xác'}</b><p>${q.e}</p>${S.ok?'':`<p>Kiến thức cần xem lại: <b>${K[q.k]}</b></p><button class="b" onclick="review('${q.k}')">Xem lại bài giảng</button>`}</div></div>`:'';
+return `<div class="card"><h1>C1L2: DataFrame.groupby</h1><div class="tabs">${TABS()}</div>
+<div class="qh"><b>Câu ${S.qi+1} trên ${n}</b><span class="c">Cần đạt từ 80% để mở bài tiếp theo</span></div><div class="bar"><i style="width:${(S.qi+(S.checked?1:0))/n*100}%"></i></div>
+<div class="q">${q.q}</div>${o}${fb}
+<div class="row" style="margin-top:12px">${S.checked?`<button class="b p" onclick="nxt()">${S.qi+1>=n?'Xem kết quả':'Câu tiếp theo'}</button>`:'<button class="b p" onclick="chk()">Kiểm tra</button>'}</div></div>`}
+function RS(){const s=sc(),p=Math.round(s/Q.length*100),w=Object.keys(S.res).filter(i=>S.res[i]===false).length;
+const rows=['K1','K2','K3'].map(k=>`<div class="m"><span>${K[k]}</span>${mc(mast(k))}${mast(k)==='r'?`<button class="b" onclick="review('${k}')">Xem lại</button>`:''}</div>`).join('');
+return `<div class="card"><h1>C1L2: DataFrame.groupby</h1><div class="tabs">${TABS()}</div>
+<h2>Kết quả quiz: ${s} trên ${Q.length} câu (${p}%)</h2>
+<p>${pass()?'Bạn đã đạt từ 80%. Bài C1L3 đã được mở.':'Chưa đạt 80%. Hãy xem lại các kiến thức bên dưới rồi làm lại những câu sai.'}</p>${rows}
+<div class="row" style="margin-top:14px">${w?'<button class="b p" onclick="retry(true)">Làm lại các câu sai</button>':''}<button class="b" onclick="retry(false)">Làm lại toàn bộ</button></div></div>`}
+function OV(){const d=['K1','K2','K3'].map(k=>`<div class="m"><span>${K[k]}</span>${mc(mast(k))}${mast(k)==='r'?`<button class="b" onclick="review('${k}')">Xem lại</button>`:''}</div>`).join('');
+return `<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:flex-start"><svg class="av" style="flex:none"><use href="#lib"/></svg><div><h1>Lộ trình pandas 2.2.2</h1><p>Hôm nay bạn đang ở bài groupby. Làm bài thực hành và quiz để mở bài tiếp theo.</p><button class="b p" onclick="nav('lec')">Tiếp tục học</button></div></div></div>
+<div class="grid"><div class="card"><div class="big">Ngày 3 trên 14</div><p>Tiến độ 21%</p></div><div class="card"><div class="big">${Object.keys(S.res).length?sc()+' trên '+Q.length:'Chưa làm'}</div><p>Điểm quiz bài groupby</p></div><div class="card"><div class="big">C1L2</div><p>Bài đang học</p></div></div>
+<div class="card"><h2>Mức độ nắm kiến thức</h2>${d}</div>`}
+function render(){side();const t=S.view==='ov'?'Lộ trình của tôi':'C1L2 groupby';$('#bc').textContent='LibLearn / pandas 2.2.2 / '+t;
+$('#v').innerHTML=S.view==='ov'?OV():S.tab==='lec'?LEC():S.tab==='pr'?PR():QZ();$('#app').classList.toggle('col',S.col)}
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#srch').focus()}});
+render();
+</script><style>.logo i{border-radius:10px}
+.main{position:relative}.main::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='340' fill='none' stroke='%233B5BA9' stroke-opacity='.15' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cg transform='translate(30 30)'%3E%3Cpath d='M4 6h24v30H4zM4 36a4 4 0 0 1 4-4h20M10 12h12M10 18h8'/%3E%3C/g%3E%3Cg transform='translate(200 20)'%3E%3Ccircle cx='22' cy='22' r='12'/%3E%3Cellipse cx='22' cy='22' rx='24' ry='7' transform='rotate(-20 22 22)'/%3E%3C/g%3E%3Cg transform='translate(120 120)'%3E%3Crect x='6' y='12' width='32' height='24' rx='5'/%3E%3Cpath d='M22 12V4M18 4h8M14 22v2M30 22v2M16 30h12M2 20v8M42 20v8'/%3E%3C/g%3E%3Cg transform='translate(240 170)'%3E%3Crect x='8' y='8' width='28' height='28' rx='4'/%3E%3Cpath d='M14 2v6M22 2v6M30 2v6M14 36v6M22 36v6M30 36v6M2 16h6M2 28h6M36 16h6M36 28h6M16 28l4-12 4 12M17.5 24h5M30 16v12'/%3E%3C/g%3E%3Cg transform='translate(30 220)'%3E%3Cpath d='M22 4c8 8 8 20 0 30-8-10-8-22 0-30zM14 28l-8 8 2-12M30 28l8 8-2-12'/%3E%3Ccircle cx='22' cy='16' r='3'/%3E%3C/g%3E%3Cpath d='M300 60l3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1zM90 300l2 5 5 1-4 4 1 5-4-3-4 3 1-5-4-4 5-1zM170 60l2 5 5 1-4 4 1 5-4-3-4 3 1-5-4-4 5-1z'/%3E%3C/svg%3E")}
+.wrap{position:relative;z-index:1}
+.stp{display:flex;margin-bottom:22px;flex-wrap:wrap}.stp div{flex:1 1 140px;display:flex;gap:10px;align-items:center;padding:8px 0;color:var(--mut);border-bottom:3px solid var(--line)}.stp div.on{color:var(--pri);border-color:var(--pri)}.stp div.dn{color:var(--ok);border-color:var(--ok)}.stp b{width:26px;height:26px;display:grid;place-items:center;background:var(--bg);border-radius:8px}
+.fld{margin-bottom:16px}.fld label{display:block;font-weight:500;margin-bottom:6px}.fld .inp{width:100%;max-width:520px}.fld small{display:block;color:var(--mut);margin-top:4px}.fld .er{color:var(--err);margin-top:4px;font-weight:500}.inp.bad{border-color:var(--err)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;max-width:560px}
+.lvl{border:1px solid var(--line);padding:14px;border-radius:10px;background:var(--panel);cursor:pointer;text-align:left;font:inherit;color:var(--ink)}.lvl:hover{border-color:var(--pri)}.lvl.sel{border-color:var(--pri);background:var(--priBg)}
+.stars{color:var(--warn);letter-spacing:2px;font-size:17px}
+</style><script>const st5=n=>'★'.repeat(n)+'☆'.repeat(5-n);
+function avg(){return Object.values(S.res).reduce((a,b)=>a+b,0)/Q.length}
+function pz(){return Object.keys(S.res).length===Q.length&&avg()>=3.5}
+function mast(k){const r=Q.map((q,i)=>[q.k,S.res[i]]).filter(x=>x[0]===k).map(x=>x[1]);if(r.some(v=>v!==undefined&&v<4))return'r';return r.every(v=>v>=4)?'o':'n'}
+function chk(){const i=S.list[S.qi],q=Q[i];let ok;
+if(q.t==='fill'){const v=(S.fv||'').trim().toLowerCase().replace(/\(\)/g,'');if(!v)return toast('Hãy nhập đáp án');ok=q.a.includes(v)}
+else{if(S.sel===null)return toast('Hãy chọn một đáp án');ok=S.sel===q.a}
+if(ok){S.res[i]=S.tries?3:5;S.ok=true;S.checked=true}else if(!S.tries){S.tries=1;S.wn=true}else{S.res[i]=1;S.ok=false;S.checked=true}
+render()}
+function skip(){S.res[S.list[S.qi]]=1;S.ok=false;S.wn=false;S.checked=true;render()}
+function again(){S.sel=null;S.fv='';S.wn=false;render()}
+function nxt(){S.qi++;S.sel=null;S.fv='';S.checked=false;S.wn=false;S.tries=0;if(S.qi>=S.list.length)S.fin=true;render()}
+function retry(w){S.list=w?Q.map((q,i)=>i).filter(i=>S.res[i]<4):[0,1,2,3,4];S.list.forEach(i=>delete S.res[i]);S.qi=0;S.sel=null;S.fv='';S.checked=false;S.wn=false;S.tries=0;S.fin=false;render()}
+function QZ(){if(S.fin)return RS();const i=S.list[S.qi],q=Q[i],n=S.list.length,dis=S.checked||S.wn;let o;
+if(q.t==='fill')o=`<input class="inp" style="width:100%;max-width:none;font-family:'IBM Plex Mono',monospace" id="fa" aria-label="Đáp án" placeholder="Nhập đáp án" value="${S.fv.replace(/"/g,'&quot;')}" ${dis?'disabled':''} oninput="S.fv=this.value">`;
+else o=q.o.map((x,j)=>{let c='opt';if(S.checked){if(j===q.a)c+=' good';else if(j===S.sel)c+=' bad'}else if(S.wn&&j===S.sel)c+=' bad';else if(j===S.sel)c+=' sel';return `<button class="${c}" ${dis?'disabled':''} onclick="pick(${j})"><span class="ix">${'ABCD'[j]}</span>${x}</button>`}).join('');
+const rv=`<p>Kiến thức cần xem lại: <b>${K[q.k]}</b></p><button class="b" onclick="review('${q.k}')">Xem lại bài giảng</button>`;
+const lb='<svg class="av" style="flex:none"><use href="#lib"/></svg>';let fb='';
+if(S.wn)fb=`<div class="fb bad">${lb}<div><b>Chưa chính xác</b><p>Bạn còn một lần thử: đúng ở lần thử lại được 3 sao, bỏ qua được 1 sao. Bạn không bị chặn ở câu này.</p>${rv}<div class="row" style="margin-top:10px"><button class="b p" onclick="again()">Thử lại</button><button class="b" onclick="skip()">Bỏ qua, nhận 1 sao</button></div></div></div>`;
+if(S.checked){const s=S.res[i];fb=`<div class="fb ${S.ok?'ok':'bad'}">${lb}<div><b>${S.ok?'Chính xác':'Đáp án đúng đã hiển thị'}</b> <span class="stars">${st5(s)}</span><p>${q.e}</p>${q.t==='fill'&&!S.ok?`<p>Đáp án: <code>${q.a[0]}()</code></p>`:''}${s<4?rv:''}</div></div>`}
+return `<div class="card"><h1>C1L2: DataFrame.groupby</h1><div class="tabs">${TABS()}</div><div class="qh"><b>Câu ${S.qi+1} trên ${n}</b><span class="c">Đạt khi trung bình từ 3,5 sao</span></div><div class="bar"><i style="width:${(S.qi+(S.checked?1:0))/n*100}%"></i></div><div class="q">${q.q}</div>${o}${fb}<div class="row" style="margin-top:12px">${S.checked?`<button class="b p" onclick="nxt()">${S.qi+1>=n?'Xem kết quả':'Câu tiếp theo'}</button>`:S.wn?'':'<button class="b p" onclick="chk()">Kiểm tra</button>'}</div></div>`}
+function RS(){const a=avg(),P=pz(),w=Q.some((q,i)=>S.res[i]<4);
+const rows=Q.map((q,i)=>`<div class="m"><span>Câu ${i+1}: ${K[q.k]}</span><span class="stars">${st5(S.res[i]||0)}</span></div>`).join('');
+const km=['K1','K2','K3'].map(k=>`<div class="m"><span>${K[k]}</span>${mc(mast(k))}${mast(k)==='r'?`<button class="b" onclick="review('${k}')">Xem lại</button>`:''}</div>`).join('');
+return `<div class="card"><h1>C1L2: DataFrame.groupby</h1><div class="tabs">${TABS()}</div><h2>Điểm trung bình: ${a.toFixed(1)} trên 5 sao</h2><span class="c ${P?'ok':'w'}">${P?'Đạt: bài C1L3 và mini-project đã mở':'Chưa đạt: cần trung bình từ 3,5 sao'}</span><h2 style="margin-top:16px">Điểm từng câu</h2>${rows}<h2 style="margin-top:16px">Kiến thức cần ôn</h2>${km}<div class="row" style="margin-top:14px">${w?'<button class="b p" onclick="retry(true)">Làm lại các câu dưới 4 sao</button>':''}<button class="b" onclick="retry(false)">Làm lại toàn bộ</button></div></div>`}
+const W={step:0,lib:'pandas',ver:'2.2.2',lang:'Python',repo:'',docs:'',lv:'beginner',days:'14',min:'60',qz:'5',demo:false,err:{},gen:0,p:0};
+function chkStep(s){const e={};
+if(s===0){if(!/^[A-Za-z0-9_.\-]{1,50}$/.test(W.lib.trim()))e.lib='Nhập tên thư viện (chữ, số, dấu gạch), tối đa 50 ký tự.';
+if(!/^\d+(\.\d+){0,2}$/.test(W.ver.trim()))e.ver='Phiên bản có dạng 2.2.2 hoặc 2.2.';
+if(W.repo.trim()&&!/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/?$/.test(W.repo.trim()))e.repo='Link GitHub có dạng https://github.com/chủ-sở-hữu/tên-repo.';
+const bad=W.docs.trim().split(/\s+/).filter(Boolean).find(u=>!/^https:\/\/[^\s\/]+\.[^\s\/]+(\/\S*)?$/.test(u));if(bad)e.docs='Link không hợp lệ: '+bad}
+if(s===2){const d=+W.days,m=+W.min,q=+W.qz;if(!Number.isInteger(d)||d<1||d>60)e.days='Số ngày từ 1 đến 60.';if(!Number.isInteger(m)||m<15||m>240)e.min='Số phút mỗi ngày từ 15 đến 240.';if(!Number.isInteger(q)||q<2||q>10)e.qz='Số câu quiz mỗi API từ 2 đến 10.'}
+W.err=e;return !Object.keys(e).length}
+const fld=(id,l,h,ph)=>`<div class="fld"><label for="${id}">${l}</label><input class="inp ${W.err[id]?'bad':''}" id="${id}" value="${W[id].replace(/"/g,'&quot;')}" placeholder="${ph||''}" aria-invalid="${!!W.err[id]}" oninput="W[this.id]=this.value">${W.err[id]?`<div class="er" role="alert">${W.err[id]}</div>`:h?`<small>${h}</small>`:''}</div>`;
+function wn(){if(chkStep(W.step))W.step++;render()}function wb(){W.err={};W.step--;render()}
+function gen(){if(!chkStep(0)){W.step=0;return render()}if(!chkStep(2)){W.step=2;return render()}W.gen=1;W.p=0;clearInterval(W.t);W.t=setInterval(()=>{W.p+=3;if(W.p>=100){clearInterval(W.t);W.gen=0;W.step=0;S.view='ov';toast('Đã tạo lộ trình (mô phỏng)')}render()},100)}
+function stop(){clearInterval(W.t);W.gen=0;render()}
+function GEN(){const st=['Kiểm tra kết nối API của khoa','Research thư viện','Chọn API và lập kế hoạch','Viết bài học'],a=Math.min(3,Math.floor(W.p/25));
+return `<div class="card"><h1>Đang tạo lộ trình cho ${W.lib} ${W.ver}</h1><p>Đây là mô phỏng tiến trình, backend thật chưa báo tiến trình từng bước.</p><div class="bar"><i style="width:${W.p}%"></i></div>${st.map((s,i)=>`<div class="m"><span>${s}</span>${i<a?'<span class="c ok">Xong</span>':i===a?'<span class="c">Đang chạy</span>':'<span class="c w">Chờ</span>'}</div>`).join('')}<button class="b" style="margin-top:14px" onclick="stop()">Hủy</button></div>`}
+function NEW(){if(W.gen)return GEN();const T=['Thư viện','Người học','Thời gian','Xác nhận'];
+const hd=`<div class="stp">${T.map((t,i)=>`<div class="${i===W.step?'on':i<W.step?'dn':''}"><b>${i<W.step?'✓':i+1}</b>${t}</div>`).join('')}</div>`;let b='';
+if(W.step===0)b='<h2>Bạn muốn học thư viện nào?</h2>'+fld('lib','Tên thư viện','Ví dụ: pandas, numpy, requests')+`<div class="fld"><label for="lang">Ngôn ngữ</label><select class="inp" id="lang" onchange="W.lang=this.value">${['Python','JavaScript','C++'].map(x=>`<option ${x===W.lang?'selected':''}>${x}</option>`).join('')}</select></div>`+fld('ver','Phiên bản','Bài học sẽ đúng với phiên bản này.')+fld('repo','Repository GitHub (không bắt buộc)','Bỏ trống nếu muốn hệ thống tự tìm.','https://github.com/...')+fld('docs','Link tài liệu chính thức (không bắt buộc)','Nhiều link thì cách nhau bằng dấu cách.','https://pandas.pydata.org/docs');
+if(W.step===1)b=`<h2>Trình độ của bạn</h2><div class="g2">${[['beginner','Mới bắt đầu','Đã biết lập trình cơ bản, chưa dùng thư viện này.'],['intermediate','Trung cấp','Đã dùng thư viện tương tự, muốn học sâu hơn.']].map(([v,t,d])=>`<button class="lvl ${W.lv===v?'sel':''}" onclick="W.lv='${v}';render()"><b>${t}</b><br><span style="color:var(--mut)">${d}</span></button>`).join('')}</div>`;
+if(W.step===2){const tot=(+W.days||0)*(+W.min||0);b='<h2>Bạn có bao nhiêu thời gian?</h2>'+fld('days','Số ngày')+fld('min','Số phút mỗi ngày')+fld('qz','Số câu quiz mỗi API')+`<span class="c ${tot<300?'w':''}">Tổng ${tot} phút, 20% dành cho mini-project${tot<300?'. Hơi ít, chỉ đủ các API thiết yếu':''}</span>`}
+if(W.step===3)b=`<h2>Xác nhận thông tin</h2>${[['Thư viện',`${W.lib} ${W.ver} (${W.lang})`],['Trình độ',W.lv==='beginner'?'Mới bắt đầu':'Trung cấp'],['Thời gian',`${W.days} ngày, ${W.min} phút mỗi ngày`],['Quiz',`${W.qz} câu mỗi API`],['Repository',W.repo||'Tự tìm'],['Tài liệu',W.docs||'Mặc định']].map(([a,v])=>`<div class="m"><span>${a}</span><b>${v.replace(/</g,'&lt;')}</b></div>`).join('')}<div class="fld" style="margin-top:14px"><label><input type="checkbox" ${W.demo?'checked':''} onchange="W.demo=this.checked"> Chế độ demo (không dùng LLM, bài học chỉ là nội dung mẫu)</label></div>`;
+return `<div class="card"><h1>Tạo lộ trình học</h1><p>Điền theo từng bước. Hệ thống kiểm tra dữ liệu trước khi sang bước tiếp theo.</p>${hd}${b}<div class="row" style="margin-top:12px">${W.step?'<button class="b" onclick="wb()">Quay lại</button>':''}${W.step<3?'<button class="b p" onclick="wn()">Tiếp tục</button>':'<button class="b p" onclick="gen()">Tạo lộ trình</button>'}</div></div>`}
+const M0='import pandas as pd\n\n# 1. Đọc file diem.csv\n# 2. Tính điểm trung bình theo lớp\n# 3. Lọc học sinh dưới 5 điểm\n# 4. Xuất kết quả ra ketqua.csv\n# 5. Xử lý dòng thiếu dữ liệu\n';
+const M={code:M0,res:null};
+const TS=[['Đọc dữ liệu từ file CSV',/read_csv\(\s*["']diem\.csv["']/,'Dùng pd.read_csv("diem.csv").'],['Tính điểm trung bình theo lớp',/groupby\(\s*["']lop["']\s*\)\s*\[\s*["']diem["']\s*\]\s*\.mean\(/,'Dùng groupby("lop")["diem"].mean().'],['Lọc học sinh dưới 5 điểm',/\[\s*\w+\[\s*["']diem["']\s*\]\s*<\s*5\s*\]|query\([^)]*diem\s*<\s*5/,'Lọc bằng df[df["diem"] < 5].'],['Xuất kết quả ra file',/to_csv\(\s*["'][^"']+["']/,'Dùng to_csv("ketqua.csv").'],['Xử lý dòng thiếu dữ liệu',/dropna\(|fillna\(/,'Dùng dropna() hoặc fillna(...).']];
+function mrun(){M.code=$('#mc').value;M.res=TS.map(t=>t[1].test(M.code));render()}
+function mrst(){M.code=M0;M.res=null;render()}
+function MINI(){const n=M.res?M.res.filter(Boolean).length:0,e=M.code.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+return `<div class="card"><h1>Mini-project: phân tích điểm lớp học</h1><p>Sửa code để đạt đủ 5 yêu cầu. Bản demo chạy mô phỏng bằng cách kiểm tra mẫu code, chưa chạy Python thật.</p><div class="row"><span class="c">Gợi ý hoàn thành trong 4 giờ</span><span class="c ${n===5?'ok':'w'}">${n} trên 5 yêu cầu đạt</span></div></div><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"><div class="card"><h2>Yêu cầu bắt buộc</h2>${TS.map((t,i)=>`<div class="m"><span>${t[0]}${M.res&&!M.res[i]?`<br><small style="color:var(--mut)">${t[2]}</small>`:''}</span>${!M.res?'<span class="c">Chưa chạy</span>':M.res[i]?'<span class="c ok">Đạt</span>':'<span class="c w">Chưa đạt</span>'}</div>`).join('')}</div><div class="card"><div class="tb"><button class="b p" onclick="mrun()">Chạy test</button><button class="b" onclick="mrst()">Đặt lại</button><span class="sp"></span><span class="c w">Chạy mô phỏng</span></div><textarea id="mc" spellcheck="false" aria-label="Khung code mini-project">${e}</textarea>${n===5?'<div class="fb ok"><svg class="av" style="flex:none"><use href="#lib"/></svg><div><b>Hoàn thành mini-project</b><p>Bạn đã đạt đủ các yêu cầu bắt buộc.</p></div></div>':''}</div></div>`}
+function OV(){const P=pz(),a=Object.keys(S.res).length===Q.length?avg().toFixed(1)+' sao':'Chưa làm';
+const d=['K1','K2','K3'].map(k=>`<div class="m"><span>${K[k]}</span>${mc(mast(k))}${mast(k)==='r'?`<button class="b" onclick="review('${k}')">Xem lại</button>`:''}</div>`).join('');
+return `<div class="card"><div class="row" style="flex-wrap:nowrap;align-items:flex-start"><svg class="av" style="flex:none"><use href="#lib"/></svg><div><h1>Lộ trình ${W.lib} ${W.ver}</h1><p>${W.days} ngày, ${W.min} phút mỗi ngày. Bài đang học: groupby.</p><button class="b p" onclick="nav('lec')">Tiếp tục học</button></div></div></div><div class="grid"><div class="card"><div class="big">Ngày 3 trên ${W.days}</div><p>Tiến độ học</p></div><div class="card"><div class="big">${a}</div><p>Điểm quiz bài groupby</p></div><div class="card"><div class="big">${P?'Đã mở':'Đang khóa'}</div><p>Mini-project</p></div></div><div class="card"><h2>Mức độ nắm kiến thức</h2>${d}</div>`}
+function side(){const show=t=>!S.q||t.toLowerCase().includes(S.q.toLowerCase()),P=pz(),v=S.view;
+const it=(t,on,fn,cls,ic)=>show(t)?`<button class="nl ${on?'on':''} ${cls||''}" onclick="${fn}" title="${t}"><svg class="ic"><use href="#${ic}"/></svg><span>${t}</span></button>`:'';
+$('#side').innerHTML=`<div class="logo"><i>{ }</i><span>LibLearn</span></div><h4>Bắt đầu</h4>${it('Tạo lộ trình',v==='new',"nav('new')",'','i-grid')}${it('Lộ trình của tôi',v==='ov',"nav('ov')",'','i-book')}<h4>Chương 1: DataFrame</h4>${it('C1L1 DataFrame và loc (xong)',0,"toast('Bài này chưa có nội dung demo')",'','i-check')}${it('C1L2 groupby',v==='lec',"nav('lec')",'','i-code')}${it('C1L3 merge'+(P?'':' (khóa)'),0,P?"toast('C1L3 chưa có nội dung demo')":"toast('Cần trung bình từ 3,5 sao ở quiz groupby để mở bài này')",P?'':'lk',P?'i-code':'i-lock')}<h4>Cuối khóa</h4>${it('Mini-project'+(P?'':' (khóa)'),v==='mini',P?"nav('mini')":"toast('Hoàn thành quiz groupby để mở mini-project')",P?'':'lk',P?'i-flag':'i-lock')}<div class="foot"><button class="nl" onclick="tg()" title="Thu gọn thanh bên"><svg class="ic" style="transform:${S.col?'rotate(180deg)':'none'}"><use href="#i-left"/></svg><span>Thu gọn</span></button></div>`}
+function render(){side();$('#app').classList.toggle('col',S.col);const n={new:'Tạo lộ trình',ov:'Lộ trình của tôi',mini:'Mini-project',lec:'C1L2 groupby'}[S.view];$('#bc').textContent='LibLearn / '+n;
+$('#v').innerHTML=S.view==='new'?NEW():S.view==='ov'?OV():S.view==='mini'?MINI():S.tab==='lec'?LEC():S.tab==='pr'?PR():QZ()}
+S.view='new';render();
+</script></body></html>
